@@ -1,45 +1,69 @@
-function generateSVG(userInput) {
-  let svgContent = '';
+class Circle {
+  constructor(userInput) {
+    this.userInput = userInput;
+  }
 
-  // a switch statement is used to perform different actions based on different conditions
+  generateSVG() {
+    return `<svg height="210" width="500">
+              <circle cx="100" cy="100" r="80" 
+              style="fill:${this.userInput.shapeColor};" />
+              <text x="53" y="110" fill="${this.userInput.textColor}" font-size="45">${this.userInput.text}</text>
+            </svg>`;
+  }
+}
+
+class Triangle {
+  constructor(userInput) {
+    this.userInput = userInput;
+  }
+
+  generateSVG() {
+    return `<svg height="210" width="500">
+              <polygon points="100,50 50,150 150,150"
+              style="fill:${this.userInput.shapeColor};" />
+              <text x="79" y="115" fill="${this.userInput.textColor}" font-size="20">${this.userInput.text}</text>
+            </svg>`;
+  }
+}
+
+class Square {
+  constructor(userInput) {
+    this.userInput = userInput;
+  }
+
+  generateSVG() {
+    return `<svg height="210" width="500">
+              <rect width="150" height="150" 
+              style="fill:${this.userInput.shapeColor};" />
+              <text x="27" y="90" fill="${this.userInput.textColor}" font-size="45">${this.userInput.text}</text>
+            </svg>`;
+  }
+}
+
+function generateSVG(userInput) {
+  let shape;
+
+  // Determine which shape class to instantiate based on userInput.shape
   switch (userInput.shape) {
     case 'triangle':
-      svgContent = `<svg height="210" width="500">
-                      <polygon points="100,50 50,150 150,150"
-                      style="fill:${userInput.shapeColor};" />
-                      <text x="79" y="115" fill="${userInput.textColor}" font-size="20">${userInput.text}</text>
-                    </svg>`;
-      break; //stops the execution of more code and case testing inside the block. If break is omitted, the next code block in the switch statement is executed.
+      shape = new Triangle(userInput);
+      break;
 
     case 'circle':
-      svgContent = `<svg height="210" width="500">
-                      <circle cx="100" cy="100" r="80" 
-                      style="fill:${userInput.shapeColor};" />
-                      <text x="53" y="110" fill="${userInput.textColor}" font-size="45">${userInput.text}</text>
-                    </svg>`;
+      shape = new Circle(userInput);
       break;
 
     case 'square':
-      svgContent = `<svg height="210" width="500">
-                      <rect width="150" height="150" 
-                      style="fill:${userInput.shapeColor};" />
-                      <text x="27" y="90" fill="${userInput.textColor}" font-size="45">${userInput.text}</text>
-                    </svg>`;
+      shape = new Square(userInput);
       break;
 
-
-// although the input is selected in the CLI, it is best practice to have a default case in the switch statement
-      default:
-        console.error(`Unknown shape: ${userInput.shape}. Using default shape 'circle'.`);
-         svgContent = `<svg height="210" width="500">
-                  <circle cx="100" cy="100" r="50" 
-                  style="fill:blue;" />
-                </svg>`;
+    default:
+      console.error(`Unknown shape: ${userInput.shape}. Using default shape 'circle'.`);
+      shape = new Circle({ shapeColor: 'blue', textColor: 'white', text: 'Default' });
       break;
-
   }
 
-  return svgContent;
+  return shape.generateSVG();
 }
 
 module.exports = { generateSVG };

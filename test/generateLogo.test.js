@@ -1,20 +1,64 @@
-const { generateSVG } = require('./logoGenerator');
+const fs = require('fs');
+const inquirer = require('inquirer');
+const generateSVG = require('./logoGenerator.js');
+const promptUser = require('./index.js');
+jest.mock('fs');
+jest.mock('inquirer', () => ({
+  prompt: jest.fn(),
+}));
 
-test('generateSVG returns valid SVG content', () => {
-  const userInput = {
-    text: 'ABC',
-    textColor: 'red',
-    shape: 'circle',
-    shapeColor: 'blue',
-  };
+describe('generateSVG function', () => {
+  it('should generate SVG for a circle', () => {
+    const userInput = {
+      text: 'ABC',
+      textColor: 'black',
+      shape: 'circle',
+      shapeColor: 'red',
+    };
 
-  const result = generateSVG(userInput);
+    const svgContent = generateSVG(userInput);
 
-  // Implement your assertions based on the expected SVG content
-  // For simplicity, let's just check if it contains the user's input text
-  expect(result).toContain(userInput.text);
+    expect(svgContent).toContain('<circle');
+    expect(svgContent).toContain('style="fill:red;"');
+    expect(svgContent).toContain(`fill="${userInput.textColor}"`);
+    expect(svgContent).toContain(`font-size="45">${userInput.text}</text>`);
+  });
+
+  it('should handle unknown shape and use default circle', () => {
+    const userInput = {
+      text: 'Default',
+      textColor: 'white',
+      shape: 'unknownShape',
+      shapeColor: 'blue',
+    };
+
+    const svgContent = generateSVG(userInput);
+
+    expect(svgContent).toContain('<circle');
+    expect(svgContent).toContain('style="fill:blue;"');
+    expect(svgContent).toContain('fill="white"');
+    expect(svgContent).toContain('font-size="45">Default</text>');
+  });
+
 });
 
-const shape = new Triangle();
-shape.setColor("blue");
-expect(shape.render()).toEqual('<polygon points="150, 18 244, 182 56, 182" fill="blue" />');
+describe('promptUser function', () => {
+  it('should prompt the user and return user input', async () => {
+    // Mock inquirer's prompt function to return a specific user input
+    inquirer.prompt = jest.fn().mockResolvedValue({
+      text: 'XYZ',
+      textColor: 'green',
+      shape: 'square',
+      shapeColor: 'yellow',
+    });
+
+    const userInput = await promptUser();
+
+    expect(userInput).toEqual({
+      text: 'XYZ',
+      textColor: 'green',
+      shape: 'square',
+      shapeColor: 'yellow',
+    });
+  });
+});
