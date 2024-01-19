@@ -1,7 +1,7 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
-const generateSVG = require('./logoGenerator.js');
-const promptUser = require('./index.js');
+const {generateSVG} = require('../Develop/logoGenerator.js');
+const promptUser = require('../Develop/index.js');
 jest.mock('fs');
 jest.mock('inquirer', () => ({
   prompt: jest.fn(),

@@ -43,6 +43,8 @@ class Square {
 function generateSVG(userInput) {
   let shape;
 
+console.log(userInput)
+
   // Determine which shape class to instantiate based on userInput.shape
   switch (userInput.shape) {
     case 'triangle':

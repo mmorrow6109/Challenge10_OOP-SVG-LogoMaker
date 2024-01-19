@@ -1,5 +1,5 @@
 <svg height="210" width="500">
-              <circle cx="100" cy="100" r="80" 
-              style="fill:black;" />
-              <text x="53" y="110" fill="green" font-size="45">abc</text>
+              <polygon points="100,50 50,150 150,150"
+              style="fill:Black;" />
+              <text x="79" y="115" fill="Red" font-size="20">XYZ</text>
             </svg>
